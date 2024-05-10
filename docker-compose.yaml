@@ -6,6 +6,6 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRESS_PASSWORD=root
-      - POSTGRESS_USER=admin
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=admin
     image: postgres:14.3-alpine
