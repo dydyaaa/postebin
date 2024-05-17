@@ -8,10 +8,17 @@
 <div class="container-fluid d-flex justify-content-center align-items-center">
     <div class="text-center col-6">
         <p>Информация о разработке веб-приложения</p>
-        <span>{{ current_user.id }}</span><br>
-        <img src="../static/media/imgages/microservices.png" alt="microservices" width="500px"><br>
+        <span>{{ current_user.username }}</span><br>
+        <!-- <img src="../static/media/imgages/microservices.png" alt="microservices" width="500px"><br> -->
         <a href="{{ url_for('login') }}" class="btn btn-success">Авторизация</a>
         <a href="{{ url_for('logout') }}" class="btn btn-danger">Выйти</a>
     </div>
 </div>
-{% endblock %}
+<!-- 
+<a href="https://t.me/evdakimoff_bot?start=1">btn</a>
+{% with messages = get_flashed_messages(with_categories=false) %}
+        {% if messages %}
+            {{ messages[0] }}
+        {% endif %}
+    {% endwith %}
+{% endblock %} -->

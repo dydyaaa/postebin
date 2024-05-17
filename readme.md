@@ -205,7 +205,8 @@ else:
 
 #### Telegram table
 
-| Name   | Type    |
-|--------|---------|
-| userid | INTEGER |
-| usertg | INTEGER |
+| Name    | Type    |
+|---------|---------|
+| id      | INTEGER |
+| user_id | INTEGER |
+| user_tg | INTEGER |
