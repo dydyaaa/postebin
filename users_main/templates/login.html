@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Авторизация
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid d-flex justify-content-center align-items-center">
+    <div class="col-6">
+        <h2>Авторизация</h2>
+        <form action="{{ url_for('login') }}" method="POST" enctype="multipart/form-data">
+            <input required placeholder="Login" class="form-control" type="username" id="username"
+                name="username"><br><br>
+            <input required placeholder="Password" class="form-control" type="password" id="password"
+                name="password"><br>
+            <a href="" class="link-secondary link-underline-light">Забыли пароль?</a>
+            <a href="{{ url_for('register') }}" class="link-secondary link-underline-light">Еще не
+                зарегистрированы?</a><br><br>
+            <button class="btn btn-success" type="submit">Войти</button>
+            <p class="p-3 text-danger">{{ error }}</p>
+        </form>
+    </div>
+</div>
+{% endblock %}

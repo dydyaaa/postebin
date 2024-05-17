@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Главная
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid d-flex justify-content-center align-items-center">
+    <div class="text-center col-6">
+        <p>Информация о разработке веб-приложения</p>
+        <span>{{ current_user.id }}</span><br>
+        <img src="../static/media/imgages/microservices.png" alt="microservices" width="500px"><br>
+        <a href="{{ url_for('login') }}" class="btn btn-success">Авторизация</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Выйти</a>
+    </div>
+</div>
+{% endblock %}

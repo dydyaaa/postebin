@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Создание поста
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid d-flex justify-content-center align-items-center">
+    <div class="text-center col-5">
+        <h2>Добавление новости</h2>
+        <form method="post">
+            <input required placeholder="Название поста" class="form-control" type="title" id="title"
+                name="title"><br><br>
+            <textarea class="form-control" name="content" placeholder="Ваш пост"></textarea><br>
+            <input class="btn btn-success" type="submit" value="Добавить">
+        </form><br>
+        <a href="{{ url_for('index') }}" class="btn btn-primary">Домой</a>
+        <p class="p-3 text-danger">{{ message }}</p>
+    </div>
+</div>
+{% endblock %}
