@@ -8,11 +8,14 @@
 <h1>{{ post[1] }}</h1>
 <p>{{ post }}</p>
 <h1>{{ post[6] }}</h1>
-{% if status==post[4] %}
-{% else %}
+{% if status=='self sub' %}
+{% elif status=='un sub' %}
 <button class="btn btn-primary">Подписаться</button>
+{% elif status=='sub' %}
+<button class="btn btn-primary">Подписаться</button>
+{% elif status=='not authorized' %}
+<button class="btn btn-primary">Авторизоваться</button>
 {% endif %}
 
-{{ status }}
 
 {% endblock %}

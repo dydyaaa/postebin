@@ -145,8 +145,10 @@ def view_post(url):
                 else:
                     try:
                         response = requests.get(f'{NOTIFICATION_MICROSERVICE}/is_subscribe/{current_user.username}/{post[4]}')
-                        print(response.json())
-                        status = response.json()
+                        if response.json() == [0]:
+                            status = 'un sub'
+                        else:
+                            status = 'sub'
                     except Exception as e:
                         status = e
             else:
