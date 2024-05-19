@@ -1,0 +1,214 @@
+/* styles.css */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #0d1117;
+    color: #c9d1d9;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.sidebar {
+    width: 20%;
+    background-color: #161b22;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    color: #c9d1d9;
+}
+
+.sidebar input {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+    border-radius: 6px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin-bottom: 10px;
+}
+
+.main-content {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* Общие стили для header */
+header, .header {
+    background-color: #24292e;
+    color: white;
+    padding: 14px 20px;
+    display: flex; /* Добавили для header */
+    justify-content: space-between; /* Добавили для header */
+    align-items: center; /* Добавили для header */
+}
+
+.header .logo {
+    display: flex;
+    align-items: center;
+}
+
+.header .logo img {
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
+}
+
+.header .nav {
+    display: flex;
+    gap: 16px;
+}
+
+.header .nav a {
+    color: white;
+    text-decoration: none;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+.header .nav a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.header .search {
+    display: flex; /* Добавили для .search */
+    align-items: center; /* Добавили для .search */
+}
+
+.header .search input {
+    width: 100%;
+    max-width: 400px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.user-profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.home {
+    display: flex;
+}
+
+.activity {
+    width: 70%;
+}
+
+.activity-item {
+    background-color: #161b22;
+    padding: 20px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.activity-item p {
+    margin: 0;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-info img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user-info div {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-info button {
+    padding: 10px;
+    background-color: #238636;
+    border: none;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.repo-list .repo-item {
+    background-color: #161b22;
+    padding: 20px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.repo-list .repo-item p {
+    margin: 5px 0;
+}
+
+.repo-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.sidebar-right {
+    width: 30%;
+    padding-left: 20px;
+}
+
+.ad {
+    background-color: #161b22;
+    padding: 20px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.ad h3 {
+    color: #c9d1d9;
+}
+
+.ad button {
+    padding: 10px;
+    background-color: #238636;
+    border: none;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.latest-changes {
+    background-color: #161b22;
+    padding: 20px;
+    border-radius: 6px;
+}
+
+.latest-changes h3 {
+    color: #c9d1d9;
+}
+
+.latest-changes ul {
+    list-style: none;
+    padding: 0;
+}
+
+.latest-changes li {
+    margin-bottom: 10px;
+}
+
+.latest-changes li p {
+    margin: 5px 0;
+}

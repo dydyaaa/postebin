@@ -180,6 +180,8 @@ else:
 | useremail     | VARCHAR   | 
 | password      | TEXT      | 
 | status        | VARCHAR   | 
+| gender        | VARCAR    |
+| avatar        | TEXT      |
 | register date | TIMESTAMP | 
 
 ### Posts microservice
@@ -193,6 +195,9 @@ else:
 | url            | VARCHAR   |
 | create date    | TIMESTAMP |
 | created by     | INTEGER   |
+| views          | INTEGER   |
+| likes          | INTEGER   |
+| dislikes       | INTEGER   |
 
 ### Notification microservice
 #### Subscribers table

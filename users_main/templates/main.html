@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Dashboard</title>
+    <link rel="stylesheet" href="../static/styles/main.css">
+    <link rel="icon" href="../static/media/icons/free-icon-post-6824114.png">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="../static/media/icons/free-icon-post-6824114.png" alt="GitHub Logo">
+            <span>POSTEBIN</span>
+        </div>
+        <nav class="nav">
+            <a href="#">Поиск</a>
+            <a href="#">Уведомления</a>
+            {% if status == True %}
+            <a href="{{ url_for('add_post') }}">Админ панель</a>
+            {% endif %}
+            <a href="{{ url_for('add_post') }}">Создать пост</a>
+            <a href="{{ url_for('profile') }}">Профиль</a>
+        </nav>
+    </header>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="top-repositories">
+                <h2>Ваши посты</h2>
+                <input type="text" placeholder="Найти пост...">
+                <ul>
+                    {% for item in data %}
+                    <li><a href="/post/{{ item[2] }}">{{ item[2] }}</a></li>
+                    {% endfor %}
+                    
+                </ul>
+            </div>
+        </aside>
+        <main class="main-content">
+            <section class="home">
+                <div class="activity">
+                    <h2>Главная</h2>
+                    <div class="repo-list">
+                        <div class="repo-item">
+                            <h3>OlisavaV создала новый пост</h3>
+                            <p>Вчера</p>
+                            <div class="repo-info">
+                                <p>OlisavaV/ControlWork1</p>
+                                <p>Посмотреть</p>
+                            </div>
+                        </div>
+                        <div class="repo-item">
+                            <h3>OlisavaV создала новый пост</h3>
+                            <p>На прошлой неделе</p>
+                            <div class="repo-info">
+                                <p>OlisavaV/ControlWork1</p>
+                                <p>Посмотреть</p>
+                            </div>
+                        </div>
+                        <div class="repo-item">
+                            <h3>OlisavaV создала новый пост</h3>
+                            <p>В этом месяце</p>
+                            <div class="repo-info">
+                                <p>{{ data }}</p>
+                                <p>Посмотреть</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-right">
+                    <div class="ad">
+                        <h3>YANDEX PLUS 12 МЕСЯЦЕВ</h3>
+                        <p>По промокоду «SOSI_PENIS» YANDEX PLUS бесплатно на год.</p>
+                        <button>Узнать больше</button>
+                    </div>
+                    <div class="latest-changes">
+                        <h3>Latest changes</h3>
+                        <ul>
+                            <li>
+                                <p>3 hours ago</p>
+                                <p>Updated dates for Actions runner using Node20 instead of Node16 by default</p>
+                            </li>
+                            <li>
+                                <p>Yesterday</p>
+                                <p>The GitHub Enterprise Server 3.13 Release Candidate is available</p>
+                            </li>
+                            <li>
+                                <p>Yesterday</p>
+                                <p>New dates for Actions larger runner multi-label deprecation</p>
+                            </li>
+                            <li>
+                                <p>2 days ago</p>
+                                <p>Deprecation – security advisories in private repositories</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <br>
+                    <div class="latest-changes">
+                        <h3>Топовые посты</h3>
+                        <ul>
+                            <li>
+                                <p>3 hours ago</p>
+                                <p>Updated dates for Actions runner using Node20 instead of Node16 by default</p>
+                            </li>
+                            <li>
+                                <p>Yesterday</p>
+                                <p>The GitHub Enterprise Server 3.13 Release Candidate is available</p>
+                            </li>
+                            <li>
+                                <p>Yesterday</p>
+                                <p>New dates for Actions larger runner multi-label deprecation</p>
+                            </li>
+                            <li>
+                                <p>2 days ago</p>
+                                <p>Deprecation – security advisories in private repositories</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

@@ -58,6 +58,17 @@ def view_post(url):
         redis_client.setex(cache_key, 180, json.dumps(data))
         print(f'data from sql')
         return jsonify(data)
+    
+@app.route('/my_posts/<string:username>')
+def my_posts(username):
+    cursor.execute("SELECT * FROM posts WHERE created_by = ?", (username,))
+    data = cursor.fetchall()
+    return jsonify(data)
+
+@app.route('/subscriptions_posts/<string:username>')
+def subscriptions_posts(username):
+    pass
+
 
 if __name__ == '__main__':
     app.run(port=5001, debug=True)

@@ -10,6 +10,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 POSTS_MICROSERVICE = 'http://127.0.0.1:5001'
+NOTIFICATION_MICROSERVICE = 'http://127.0.0.1:5002'
 
 db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'users.db')
 
@@ -93,10 +94,6 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route('/')
-def index():
-    return render_template('index.html', current_user=current_user)
-
 @app.route('/add_post', methods = ['POST', 'GET'])
 @login_required
 def add_post():
@@ -136,6 +133,35 @@ def view_post(url):
         error = 'Failed to connect to the server'
         return error 
 
+@login_required
+@app.route('/admin')
+def admin():
+    if current_user.status == 'admin':
+        return render_template('admin.html')
+    else:
+        return redirect(url_for('index'))
+
+@app.route('/') 
+def index():
+    try:
+        response = requests.get(f'{POSTS_MICROSERVICE}/my_posts/{current_user.username}')
+        if response.status_code == 200:
+            data = response.json()
+        else:
+            data = []
+    except Exception:
+        data = [['', 'Хм... Похоже вы не создали еще ни одного поста']]
+    if current_user.is_authenticated and current_user.status == 'admin':
+        status = True
+    else:
+        status = False
+    return render_template('main.html', data=data, status=status)
+
+@app.route('/profile')
+@login_required
+def profile():
+    data = [current_user.username, current_user.useremail, current_user.status]
+    return render_template('profile.html', data=data)
 
 if __name__ == '__main__':
     app.run(debug=True)
