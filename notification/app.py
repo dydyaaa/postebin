@@ -10,9 +10,9 @@ cursor = connection.cursor()
 
 cursor.execute('''CREATE TABLE IF NOT EXISTS subscribers (
             id INTEGER PRIMARY KEY, 
-            follower INTEGER, 
-            followed INTEGER.
-            notification BOOLEAN,
+            follower VARCAHR, 
+            followed VARCAHR,
+            notification BOOLEAN
             )''')
 connection.commit()
 
@@ -20,7 +20,7 @@ connection.commit()
 def subscriptions():
     pass
 
-@app.route('/is_subscribe')
+@app.route('/is_subscribe/<string:follower>/<string:followed>')
 def subscroptions(follower, followed):
     cursor.execute(
         """
@@ -29,7 +29,9 @@ def subscroptions(follower, followed):
         WHERE follower = ? AND followed = ?""",
         (follower, followed)
     )
-    data = cursor.fetchall()
+    data = cursor.fetchone()
+    print(data)
+    return jsonify(data)
 
 if __name__ == '__main__':
     app.run(port=5002, debug=True)

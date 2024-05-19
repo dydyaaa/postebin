@@ -138,10 +138,20 @@ def view_post(url):
         response = requests.get(f'{POSTS_MICROSERVICE}/post/{url}')
         if response.status_code == 200:
             post = response.json()
+            print(post)
             if current_user.is_authenticated:
-                return render_template('post.html', post=post, user=current_user.username)
+                if current_user.username == post[4]:
+                    status = 'self sub'
+                else:
+                    try:
+                        response = requests.get(f'{NOTIFICATION_MICROSERVICE}/is_subscribe/{current_user.username}/{post[4]}')
+                        print(response.json())
+                        status = response.json()
+                    except Exception as e:
+                        status = e
             else:
-                return render_template('post.html', post=post, user='None')
+                status = 'not authorized'
+            return render_template('post.html', post=post, status=status)
         else:
             error = 'Failed to connect to the server'
         return error
