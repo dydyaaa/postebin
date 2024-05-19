@@ -10,12 +10,14 @@
 <h1>{{ post[6] }}</h1>
 {% if status=='self sub' %}
 {% elif status=='un sub' %}
-<button class="btn btn-primary">Подписаться</button>
+<a href="{{ url_for('subscribe', user=user, creator=post[4], url=post[2]) }}"><button class="btn btn-primary">Подписаться</button></a>
 {% elif status=='sub' %}
-<button class="btn btn-primary">Подписаться</button>
+<a href="{{ url_for('unsubscribe', user=user, creator=post[4], url=post[2]) }}"><button class="btn btn-primary">Отписаться</button></a>
 {% elif status=='not authorized' %}
-<button class="btn btn-primary">Авторизоваться</button>
+<a href="{{ url_for('login') }}"><button class="btn btn-primary">Авторизоваться</button></a>
 {% endif %}
+
+<a href="{{ url_for('index') }}" class="btn btn-success">Домой</a>
 
 
 {% endblock %}

@@ -138,8 +138,8 @@ def view_post(url):
         response = requests.get(f'{POSTS_MICROSERVICE}/post/{url}')
         if response.status_code == 200:
             post = response.json()
-            print(post)
             if current_user.is_authenticated:
+                user = current_user.username
                 if current_user.username == post[4]:
                     status = 'self sub'
                 else:
@@ -152,14 +152,14 @@ def view_post(url):
                     except Exception as e:
                         status = e
             else:
+                user = ''
                 status = 'not authorized'
-            return render_template('post.html', post=post, status=status)
+            return render_template('post.html', post=post, status=status, user=user)
         else:
-            error = 'Failed to connect to the server'
+            error = 'Failed to connect to the server 1'
         return error
-    except Exception:
-        error = 'Failed to connect to the server'
-        return error 
+    except Exception as e:
+        return f'{e}'
 
 @login_required
 @app.route('/admin')
@@ -178,7 +178,7 @@ def index():
         else:
             data = []
     except Exception:
-        data = [['', 'Хм... Похоже вы не создали еще ни одного поста']]
+        data = []
 
     try:
         response = requests.get(f'{POSTS_MICROSERVICE}/top_posts')
@@ -189,6 +189,15 @@ def index():
     except Exception:
         top_posts = []
 
+    try:
+        response = requests.get(f'{POSTS_MICROSERVICE}/subscriptions_posts/{current_user.username}')
+        if response.status_code == 200:
+            my_feed = response.json()
+        else:
+            my_feed = []
+    except Exception:
+        my_feed = []
+
     if current_user.is_authenticated:
         userid = current_user.id
         if current_user.status == 'admin':
@@ -198,7 +207,20 @@ def index():
     else:
         userid = None
         status = False
-    return render_template('main.html', data=data, status=status, top_posts=top_posts, userid=userid)
+    print(my_feed)
+    return render_template('main.html', data=data, status=status, top_posts=top_posts, userid=userid, my_feed=my_feed)
+
+@app.route('/subscribe/<string:user>/<string:creator>/<string:url>')
+@login_required
+def subscribe(user, creator, url):
+    response = requests.get(f'{NOTIFICATION_MICROSERVICE}/subscribe/{user}/{creator}')
+    return redirect(url_for('view_post', url=url))
+
+@app.route('/unsubscribe/<string:user>/<string:creator>/<string:url>')
+@login_required
+def unsubscribe(user, creator, url):
+    response = requests.get(f'{NOTIFICATION_MICROSERVICE}/unsubscribe/{user}/{creator}')
+    return redirect(url_for('view_post', url=url))
 
 @app.route('/profile/<string:userid>')
 @login_required

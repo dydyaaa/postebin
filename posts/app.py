@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-import sqlite3, os, redis, json
+import sqlite3, os, redis, json, requests
 
 app = Flask(__name__)
 
@@ -8,6 +8,9 @@ redis_client = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 connection = sqlite3.connect(db_path, check_same_thread=False)
 cursor = connection.cursor()
+
+USER_MICROSERVICE = 'http://127.0.0.1:5000'
+NOTIFICATION_MICROSERVICE = 'http://127.0.0.1:5002'
 
 cursor.execute(
     """
@@ -61,7 +64,6 @@ def view_post(url):
         cursor.execute("SELECT * FROM posts WHERE url = ?", (url,))
         data = cursor.fetchone()
         redis_client.setex(cache_key, 180, json.dumps(data))
-        print(f'data from sql')
         cursor.execute("UPDATE posts SET views = views + 1 WHERE url = ?", (url,))
         connection.commit()
         return jsonify(data)
@@ -74,7 +76,16 @@ def my_posts(username):
 
 @app.route('/subscriptions_posts/<string:username>')
 def subscriptions_posts(username):
-    pass
+    try:
+        response = requests.get(f'{NOTIFICATION_MICROSERVICE}/subscriptions/{username}')
+        data = response.json()
+        flat_users = [user[0] for user in data]
+        placeholders = ','.join('?' for _ in flat_users)
+        cursor.execute(f"SELECT * FROM posts WHERE created_by IN ({placeholders})", flat_users)
+        data = cursor.fetchall()
+    except Exception as e:
+        print('nehoho', e)
+    return jsonify(data)
 
 @app.route('/top_posts')
 def top_posts():

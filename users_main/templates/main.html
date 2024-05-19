@@ -33,9 +33,13 @@
                 <h2>Ваши посты</h2>
                 <input type="text" placeholder="Найти пост...">
                 <ul>
+                    {% if data|length == 0 %}
+                    <li><a href="{{ url_for('add_post') }}">Создайте свой первый пост</a></li>
+                    {% else %}
                     {% for item in data %}
                     <li><a href="/post/{{ item[2] }}">{{ item[2] }}</a></li>
                     {% endfor %}
+                    {% endif %}
                     
                 </ul>
             </div>
@@ -46,7 +50,7 @@
                     <h2>Главная</h2>
                     <div class="repo-list">
                         
-                        {% if data|length == 0 %}
+                        {% if my_feed|length == 0 %}
                         <div class="repo-item">
                             <h3>Похоже тут пусто</h3>
                             <p>Это грустно</p>
@@ -55,9 +59,9 @@
                             </div>
                         </div>
                         {% else %}
-                        {% for item in data %}
+                        {% for item in my_feed %}
                         <div class="repo-item">
-                            <a href="post/{{ item[2] }}"><h3>Пользователь {{ item[4] }} создала новый пост</h3>
+                            <a href="post/{{ item[2] }}"><h3>Пользователь {{ item[4] }} создал новый пост</h3>
                             <p>{{ item[3] }}</p>
                             <div class="repo-info">
                                 <p>{{ item[1] }}</p></a>
