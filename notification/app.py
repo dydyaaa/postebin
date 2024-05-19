@@ -20,5 +20,16 @@ connection.commit()
 def subscriptions():
     pass
 
+@app.route('/is_subscribe')
+def subscroptions(follower, followed):
+    cursor.execute(
+        """
+        SELECT COUNT(*)
+        FROM subscribers
+        WHERE follower = ? AND followed = ?""",
+        (follower, followed)
+    )
+    data = cursor.fetchall()
+
 if __name__ == '__main__':
     app.run(port=5002, debug=True)

@@ -7,4 +7,14 @@
 {% block content %}
 <h1>{{ post[1] }}</h1>
 <p>{{ post }}</p>
+<h1>{{ post[6] }}</h1>
+{% if user==post[4] %}
+{% else %}
+<button class="btn btn-primary">Подписаться</button>
+{% endif %}
 {% endblock %}
+ 
+-
+Подписаться
+Отписаться
+Логин

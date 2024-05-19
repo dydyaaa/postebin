@@ -5,7 +5,12 @@
 {% endblock %}
 
 {% block content %}
-{{ data }}<br>
-<a href="{{ url_for('logout') }}" class="btn btn-danger">Выйти</a><br>
+name: {{ data[1] }}<br>
+email: {{ data[2] }}<br>
+status: {{ data[4] }}<br>
+registered: {{ data[5] }}<br>
+gender: {{ data[6] }}<br>
+<img src="../{{ data[7] }}" width="100px"><br><br>
+<a href="{{ url_for('logout') }}" class="btn btn-danger">Выйти</a><br><br>
 <a href="{{ url_for('index') }}" class="btn btn-success">Главная</a>
 {% endblock %}

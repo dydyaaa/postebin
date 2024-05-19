@@ -17,7 +17,11 @@ cursor.execute(
     url VARACAR(100),
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_by VARCHAR(50),
-    content_sourse TEXT)"""
+    content_sourse TEXT,
+    views INTEGER DEFAULT 0,
+    likes INTEGER DEFAULT 0,
+    dislikes INTEGER DEFAULT 0
+    )"""
 )
 
 @app.route('/add_post', methods=['POST', 'GET'])
@@ -50,13 +54,16 @@ def view_post(url):
     if cache_post:
         data = json.loads(cache_post)
         redis_client.expire(cache_key, 180)
-        print(f'data from redis')
+        cursor.execute("UPDATE posts SET views = views + 1 WHERE url = ?", (url,))
+        connection.commit()
         return jsonify(data)
     else:
         cursor.execute("SELECT * FROM posts WHERE url = ?", (url,))
         data = cursor.fetchone()
         redis_client.setex(cache_key, 180, json.dumps(data))
         print(f'data from sql')
+        cursor.execute("UPDATE posts SET views = views + 1 WHERE url = ?", (url,))
+        connection.commit()
         return jsonify(data)
     
 @app.route('/my_posts/<string:username>')
@@ -68,6 +75,18 @@ def my_posts(username):
 @app.route('/subscriptions_posts/<string:username>')
 def subscriptions_posts(username):
     pass
+
+@app.route('/top_posts')
+def top_posts():
+    cursor.execute("SELECT * FROM posts ORDER BY views DESC LIMIT 4")
+    data = cursor.fetchall()
+    return jsonify(data)
+
+@app.route('/feed')
+def feed():
+    cursor.execute("SELECT * FROM posts ORDER BY views DESC")
+    data = cursor.fetchall()
+    return jsonify(data)
 
 
 if __name__ == '__main__':

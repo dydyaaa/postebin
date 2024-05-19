@@ -23,7 +23,9 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS users (
             useremail TEXT UNIQUE,
             password TEXT,
             status TEXT DEFAULT user,
-            register_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            register_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            gender VARCHAR(40),
+            avatar TEXT
             )''')
 connection.commit()
 
@@ -40,6 +42,8 @@ def load_user(user_id):
         user.username = user_data[1]
         user.useremail = user_data[2]
         user.status = user_data[4]
+        user.gender = user_data[6]
+        user.avatar = user_data[7]
         return user
     return None
 
@@ -57,6 +61,8 @@ def login():
             user.username = user_data[1]
             user.useremail = user_data[2]
             user.status = user_data[4]
+            user.gender = user_data[6]
+            user.avatar = user_data[7]
             login_user(user, remember=True)
             return redirect(url_for('index'))
         else:
@@ -70,10 +76,15 @@ def register():
         username = request.form['username']
         useremail = request.form['useremail']
         password = request.form['password']
+        gender = request.form['gender']
+        if gender == 'М':
+            avatar = r'static\media\imgages\man.png'
+        else:
+            avatar = r'static\media\imgages\woman.png'
         hashed_password = generate_password_hash(password)
         try:
-            cursor.execute('INSERT INTO users (username, useremail, password) VALUES (?, ?, ?)',
-                           (username, useremail, hashed_password))
+            cursor.execute('INSERT INTO users (username, useremail, password, gender, avatar) VALUES (?, ?, ?, ?, ?)',
+                           (username, useremail, hashed_password, gender, avatar))
             connection.commit()
             cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
             user_data = cursor.fetchone()
@@ -82,6 +93,8 @@ def register():
             user.username = user_data[1]
             user.useremail = user_data[2]
             user.status = user_data[4]
+            user.gender = user_data[6]
+            user.avatar = user_data[7]
             login_user(user, remember=True)
             return redirect(url_for('index'))
         except sqlite3.IntegrityError:
@@ -114,7 +127,7 @@ def add_post():
             if response.status_code == 200:
                 message = 'Новость успешно добавлена'
             else:
-                message = f'Ошибка добавления новости. {response.json().get('message')}'
+                message = f"Ошибка добавления новости."
         except Exception as e:
             message = f'Произошла ошибка подклчения к серверу. {e}'
     return render_template('add_post.html', message=message)
@@ -125,10 +138,13 @@ def view_post(url):
         response = requests.get(f'{POSTS_MICROSERVICE}/post/{url}')
         if response.status_code == 200:
             post = response.json()
-            return render_template('post.html', post=post)
+            if current_user.is_authenticated:
+                return render_template('post.html', post=post, user=current_user.username)
+            else:
+                return render_template('post.html', post=post, user='None')
         else:
-            print(f'An error occurred on the server {response.status_code}') 
-            return 'sosi' 
+            error = 'Failed to connect to the server'
+        return error
     except Exception:
         error = 'Failed to connect to the server'
         return error 
@@ -151,17 +167,46 @@ def index():
             data = []
     except Exception:
         data = [['', 'Хм... Похоже вы не создали еще ни одного поста']]
-    if current_user.is_authenticated and current_user.status == 'admin':
-        status = True
-    else:
-        status = False
-    return render_template('main.html', data=data, status=status)
 
-@app.route('/profile')
+    try:
+        response = requests.get(f'{POSTS_MICROSERVICE}/top_posts')
+        if response.status_code == 200:
+            top_posts = response.json()
+        else:
+            top_posts = []
+    except Exception:
+        top_posts = []
+
+    if current_user.is_authenticated:
+        userid = current_user.id
+        if current_user.status == 'admin':
+            status = True
+        else:
+            status = False
+    else:
+        userid = None
+        status = False
+    return render_template('main.html', data=data, status=status, top_posts=top_posts, userid=userid)
+
+@app.route('/profile/<string:userid>')
 @login_required
-def profile():
-    data = [current_user.username, current_user.useremail, current_user.status]
+def profile(userid):
+    cursor.execute("SELECT * FROM users WHERE id = ?", (userid,))
+    data = cursor.fetchone()
     return render_template('profile.html', data=data)
+
+@app.route('/feed')
+def feed():
+    try:
+        response = requests.get(f'{POSTS_MICROSERVICE}/feed')
+        if response.status_code == 200:
+            feed = response.json()
+        else:
+            feed = []
+    except Exception:
+        feed = []
+    return render_template('feed.html', feed=feed)
+    
 
 if __name__ == '__main__':
     app.run(debug=True)

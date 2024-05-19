@@ -11,16 +11,20 @@
     <header class="header">
         <div class="logo">
             <img src="../static/media/icons/free-icon-post-6824114.png" alt="GitHub Logo">
-            <span>POSTEBIN</span>
+            <span><a href="{{ url_for('index') }}">POSTEBIN</a></span>
         </div>
         <nav class="nav">
             <a href="#">Поиск</a>
-            <a href="#">Уведомления</a>
+            <a href="{{ url_for('feed') }}">Лента</a>
             {% if status == True %}
-            <a href="{{ url_for('add_post') }}">Админ панель</a>
+            <a href="{{ url_for('admin') }}">Админ панель</a>
             {% endif %}
             <a href="{{ url_for('add_post') }}">Создать пост</a>
-            <a href="{{ url_for('profile') }}">Профиль</a>
+            {% if userid != None %}
+            <a href="{{ url_for('profile', userid=userid) }}">Профиль</a>
+            {% else %}
+            <a href="{{ url_for('login') }}">Войти</a>
+            {% endif %}
         </nav>
     </header>
     <div class="container">
@@ -41,30 +45,28 @@
                 <div class="activity">
                     <h2>Главная</h2>
                     <div class="repo-list">
+                        
+                        {% if data|length == 0 %}
                         <div class="repo-item">
-                            <h3>OlisavaV создала новый пост</h3>
-                            <p>Вчера</p>
+                            <h3>Похоже тут пусто</h3>
+                            <p>Это грустно</p>
                             <div class="repo-info">
-                                <p>OlisavaV/ControlWork1</p>
-                                <p>Посмотреть</p>
+                                <a href="{{ url_for('feed') }}"><p>Давайте на кого нибудь подпишемся?</p></a>
                             </div>
                         </div>
+                        {% else %}
+                        {% for item in data %}
                         <div class="repo-item">
-                            <h3>OlisavaV создала новый пост</h3>
-                            <p>На прошлой неделе</p>
+                            <a href="post/{{ item[2] }}"><h3>Пользователь {{ item[4] }} создала новый пост</h3>
+                            <p>{{ item[3] }}</p>
                             <div class="repo-info">
-                                <p>OlisavaV/ControlWork1</p>
-                                <p>Посмотреть</p>
+                                <p>{{ item[1] }}</p></a>
+                                <a href="post/{{ item[2] }}"><p>Посмотреть</p></a>
                             </div>
                         </div>
-                        <div class="repo-item">
-                            <h3>OlisavaV создала новый пост</h3>
-                            <p>В этом месяце</p>
-                            <div class="repo-info">
-                                <p>{{ data }}</p>
-                                <p>Посмотреть</p>
-                            </div>
-                        </div>
+                        {% endfor %}
+                        {% endif %}
+
                     </div>
                 </div>
                 <div class="sidebar-right">
@@ -98,22 +100,12 @@
                     <div class="latest-changes">
                         <h3>Топовые посты</h3>
                         <ul>
+                            {% for item in top_posts %}
                             <li>
-                                <p>3 hours ago</p>
-                                <p>Updated dates for Actions runner using Node20 instead of Node16 by default</p>
+                                <a href="post/{{ item[2] }}"><p>{{ item[3] }}</p>
+                                <p>{{ item[1] }}</p></a>
                             </li>
-                            <li>
-                                <p>Yesterday</p>
-                                <p>The GitHub Enterprise Server 3.13 Release Candidate is available</p>
-                            </li>
-                            <li>
-                                <p>Yesterday</p>
-                                <p>New dates for Actions larger runner multi-label deprecation</p>
-                            </li>
-                            <li>
-                                <p>2 days ago</p>
-                                <p>Deprecation – security advisories in private repositories</p>
-                            </li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>
